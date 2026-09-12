@@ -1,9 +1,24 @@
 # Zero Trust Governance
 
-Zero Trust Governance (ZTG) is an open specification for governing autonomous
-execution. It defines the structural conditions under which synthetic reasoning may
-become consequential action: explicit authority, deterministic enforcement,
-evidence-coupled execution, fail-closed behavior, and attributable responsibility.
+**Preserving human agency—continuously and structurally.**
+
+Zero Trust Governance (ZTG) is an open specification for preserving human authority
+as AI systems become capable of consequential action.
+
+An AI system can propose an action. It must not become the source of the authority to
+execute it. Human agency is not preserved merely because someone approved a
+deployment, can inspect a log, or may intervene after the fact. It is preserved when
+every consequential action remains bound, at the moment of execution, to authority
+supplied by an identifiable human or institution.
+
+ZTG specifies the architecture for maintaining that boundary. Every governed effect
+must pass through deterministic enforcement, trace to attributable authority, and
+produce evidence structurally bound to execution. When the system cannot establish
+that these conditions hold, it must not grant new authority.
+
+ZTG does not try to make probabilistic reasoning trustworthy, aligned, or incapable
+of error. It treats model output as a proposal—not permission. The reasoning may be
+synthetic. The authority remains human.
 
 ## Publication status
 
