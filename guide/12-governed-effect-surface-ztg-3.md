@@ -84,3 +84,48 @@ ZTG-0e governance state, these changes inherit atomicity and consistency — the
 no interval in which a half-retired surface is both unregistered and reachable. The
 closed-set guarantee and the governance-consistency guarantee are the same guarantee
 viewed from the effect surface.
+
+## How We Do It (Constable reference implementation — non-normative)
+
+Constable implements ZTG-3 as an effect-surface registry plus a dispatch
+architecture in which the registered surfaces are the only reachable path from the
+agent to the world.
+
+**No ambient effect authority.** Constable's agent runtime holds no general-purpose
+capability to act on external systems. Every outbound effect is dispatched through a
+registered surface adaptor; there is no reachable code path by which the agent can
+produce an external effect except by routing a proposal through the gate to a
+registered surface. Effect capability is held by the surface mechanism, not
+ambiently by the agent.
+
+**Surface registry.** Surfaces and sub-surfaces are registered with their declared
+harm-class default, compositional multiplier, and `reversal_strategy`. Sub-surface
+declarations are validated to tighten, never relax, their parent's defaults. The
+registry is carried in the ZTG-0e governance bundle, so registration and
+declaration changes are signed by a ratifying principal, recorded, ordered, and
+applied atomically; the gate evaluates against the registry version pinned at
+decision-time.
+
+**Routing and provenance.** When the gate authorizes an action, Constable routes it
+to the matching registered surface and records `SURFACE_ROUTE_SELECTED`, binding the
+surface's harm class, multiplier, and reversal strategy into the action's provenance
+alongside the ZTG-5 fields. Reversal strategy is recorded as provenance only; the
+gate selection follows harm class and computed assessment per ZTG-5 and is never
+discounted by the presence of a reversal strategy.
+
+**Closure verification.** Constable treats the absence of reachable unregistered
+effect paths as a verifiable architectural property and tests for it (below). A
+reachable effect path discovered without a corresponding registered surface is
+raised as an integrity violation and triggers Stasis (ZTG-2) rather than being
+auto-registered.
+
+**Conformance tests.** Constable's internal testing for ZTG-3 includes:
+reachability analysis confirming no agent-reachable effect path bypasses a
+registered surface; ambient-authority tests confirming the agent holds no
+general-purpose effect capability; declaration tests confirming sub-surfaces tighten
+and never relax defaults; provenance tests confirming reversal strategy is recorded
+but never relaxes gate or harm class; routing tests confirming every effect records
+its surface selection; registry-governance tests confirming registration changes are
+ZTG-0e transitions; and breach tests confirming a reachable unregistered channel
+triggers Stasis. The protocol is documented in the conformance verification
+specification referenced in §22.

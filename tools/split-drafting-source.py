@@ -5,8 +5,9 @@
 
 Usage: python3 tools/split-drafting-source.py /path/to/ztg-v1-drafting
 
-Normative and explanatory wording is copied verbatim. SDS implementation sections
-and internal drafting notes are excluded.
+Normative and explanatory wording is copied verbatim. `How We Do It` sections are
+published in guide/ under a heading marking them non-normative; internal drafting
+notes are excluded.
 """
 
 from __future__ import annotations
@@ -17,6 +18,7 @@ from pathlib import Path
 
 
 ROOT = Path(__file__).resolve().parent.parent
+HOW_WE_DO_IT_HEADING = "## How We Do It (Constable reference implementation — non-normative)"
 EXCLUDED_CHAPTER = "section-14-irreversibility-of-harm-ztg-5-calibration.md"
 INTRO_FILES = (
     "section-1-0-preserving-human-agency.md",
@@ -81,9 +83,9 @@ def publish_chapter(source: Path) -> None:
         normative.extend(lines for heading, lines in blocks if heading == "## Normative")
         guide = [without_drafting_metadata(preamble)]
         guide.extend(
-            lines
+            [HOW_WE_DO_IT_HEADING, *lines[1:]] if heading == "## How We Do It" else lines
             for heading, lines in blocks
-            if heading not in {"## Normative", "## How We Do It", "## Draft Flags"}
+            if heading not in {"## Normative", "## Draft Flags"}
         )
     name = re.sub(r"^section-", "", source.name)
     (ROOT / "spec" / name).write_text(clean_join(normative), encoding="utf-8")

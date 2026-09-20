@@ -70,3 +70,40 @@ structurally closed rather than large and conventionally monitored. An implement
 that makes its effect reachability hard to analyze has made its conformance hard to
 establish, and the framework treats that as the implementation's burden, not a gap in
 §22.
+
+## How We Do It (Constable reference implementation — non-normative)
+
+Constable's conformance regime assembles the per-chapter test obligations into a single
+suite organized by property class, and pairs the testable obligations with the
+analyses the structural properties require.
+
+**Per-property suites.** Constable runs the conformance tests each chapter specifies —
+ZTG-0a coverage/tamper/gap/metric tests, ZTG-0b reproduction/drift/isolation tests,
+ZTG-0c time tests, ZTG-0d identity tests, ZTG-0e atomicity/partition tests, ZTG-1
+bypass/interception tests, ZTG-2 trigger/exit tests, ZTG-3 reachability/breach tests,
+ZTG-4 ordering/orphan/crash tests, ZTG-5 classification/banding/promotion tests, and §3
+admissibility/verdict/provenance tests — and organizes them by the property class each
+falls into rather than by chapter alone.
+
+**Reachability analysis.** For the structural properties, Constable maintains an
+effect-reachability argument over its architecture: the agent runtime holds no ambient
+effect capability, every outbound effect routes through a registered surface adaptor,
+and the gate is the only path from proposal to dispatch. This argument, not a test pass,
+is what discharges the no-bypass (ZTG-1) and closure (ZTG-3) obligations; a reachable
+effect path found without a registered surface raises an integrity violation and triggers
+Stasis.
+
+**Reproduction and convergence harness.** Constable's replay harness (ZTG-0b)
+regenerates recorded determinations under pinned bundle and engine; the convergence
+regime runs independent assessment over the recorded substrate and compares, surfacing
+divergence as a conformance failure. Both operate without reaching the effect surface.
+
+**Injection and adversarial harness.** Constable injects negative-space, fault, and
+tamper conditions — missing records, write-ahead crashes, altered log entries, partition
+between gates, suppressed evidence — and confirms the specified violation-handling and
+fail-closed responses.
+
+**Certification.** Forthcoming Constable certification packages this regime so that a
+deployment's conformance, and the scope over which it holds, can be presented as
+auditable evidence rather than asserted. The artifacts are constructed for
+re-examination by an outside party, consistent with the referee posture above.

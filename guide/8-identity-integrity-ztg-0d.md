@@ -77,3 +77,47 @@ they are not reasons to weaken the requirement; an institution that cannot say
 whose authority binds it has an institutional problem ZTG-0d surfaces rather than
 creates. The chapter requires attributable institutional identity; it does not
 specify custody mechanism, which is a deployment matter.
+
+## How We Do It (Constable reference implementation — non-normative)
+
+Constable recognizes authorization only from cryptographically bound identities
+whose authority traces to a ratifying principal, validates them against
+decision-time, and records the binding so the authority is attributable and
+replayable.
+
+**No model-held identity.** The agent runtime holds no authorizing identity and
+has no path to mint one. Identities recognized by the gate are issued and managed
+outside the agent runtime; the model can propose actions but cannot present itself
+or any identity it controls as the authorizing principal.
+
+**Signed authorization and delegation chains.** Authorizations carry signatures
+from credentials bound to principals, and Constable retains the delegation chain
+linking an operating identity back to the ratifying principal. The gate verifies
+the signature and the chain before recognizing authority, emitting an
+`IDENTITY_VALIDATED` event under ZTG-0a that records the authorizing identity and
+the chain sufficient to reconstruct the terminal principal. Authorizations that do
+not verify, or whose chain does not terminate at a ratifying principal, are
+refused.
+
+**Non-repudiable, revocable credentials.** Constable binds authorizing identity
+with asymmetric credentials rather than bearer tokens: a signature attributable to
+the principal, verifiable by the gate, and undeniable afterward. Revocation status
+is maintained and checked at decision-time; a revoked credential is not recognized
+for decisions after revocation takes effect. Transport-level authentication may
+use other mechanisms, but the authorizing binding is always the signed,
+attributable credential.
+
+**Decision-time validity.** Credential validity and revocation are evaluated
+against the ZTG-0c trusted time and the pinned decision-time snapshot, so identity
+status is assessed as of the same instant as the rest of the decision and replays
+identically through the ZTG-0b harness.
+
+**Conformance tests.** Constable's internal testing for ZTG-0d includes: tests
+confirming the agent runtime holds and can mint no authorizing identity;
+chain-termination tests confirming every recognized authorization traces to a
+ratifying principal and ultra-vires authorizations are refused; credential-strength
+tests confirming bearer/shared secrets are rejected as the authorizing binding and
+signatures are non-repudiable; revocation tests confirming revoked identities are
+not recognized after revocation; and replay tests confirming identity validity
+state reconstructs as of decision-time. The protocol is documented in the
+conformance verification specification referenced in §22.

@@ -44,8 +44,27 @@ create a certification program.
 - [`LICENSES.md`](LICENSES.md) defines the repository's effective license boundaries.
 - [`PROVENANCE.md`](PROVENANCE.md) identifies the source snapshot and transformation.
 
-SDS-specific implementation sections (`How We Do It`) and internal drafting flags are
-not part of this publication.
+Internal drafting flags and planning material are not part of this publication.
+
+## Companion material
+
+This repository holds the normative text (`spec/`) and the Deployment Guide
+(`guide/`). Each guide chapter carries the section's operational questions, its
+design rationale, and a non-normative account of how the Constable reference
+implementation maintains the invariant in operation (`How We Do It`). Material
+published outside the repository:
+
+- **[zerotrustgovernance.io](https://zerotrustgovernance.io)** — public home of
+  the specification: reading order, current draft status, and the essays the
+  normative chapters cite (§1.0 Preserving Human Agency, continuous
+  ratification, the Invariant/Envelope separation).
+- **[shadowdynamicsystems.com](https://shadowdynamicsystems.com)** — the
+  anti-pattern guide and the diagnosis (DX) and prescription (RX) series: the
+  failure modes each invariant is written to exclude, and the design
+  requirements that exclude them.
+- **[constable.id](https://constable.id)** — the reference implementation.
+  Nothing on that site is normative; conformance language is governed by
+  the *Conformance claims* section below.
 
 ## Conformance claims
 

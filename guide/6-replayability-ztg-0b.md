@@ -71,3 +71,50 @@ ordered by dependency: coupling presupposes reconstruction presupposes recording
 ZTG-0b's fidelity demands flow back into ZTG-0a as requirements on what the record
 must contain — inputs sufficient for replay, policy version, engine version — and
 forward into ZTG-4 as the reason its coupled evidence is worth coupling.
+
+## How We Do It (Constable reference implementation — non-normative)
+
+Constable implements ZTG-0b by making each governance decision a pure function of
+recorded inputs evaluated under a pinned governance bundle and a pinned engine
+version, re-runnable through a replay harness that cannot reach the effect
+surface.
+
+**Deterministic evaluation surface.** Constable evaluates policy with OPA/Rego.
+Rego's evaluation model is decidable and side-effect-free, which gives decisions
+a reproducible character by construction: the same bundle over the same input
+yields the same result. Other policy languages with equivalent decidability and
+freedom from side effects are conforming choices. The evaluation is structured to
+avoid continuous-valued computation in governance-determining paths, consistent
+with ZTG-5 banded algebra.
+
+**Version pinning.** Each decision record captures the governance bundle version and
+the OPA engine version under which it was evaluated. Constable retains the
+bundles and the engine versions across the record retention horizon so that a
+historical decision is replayed under its own decision-time procedure, not under
+the current deployment. Replay selects the pinned bundle and engine rather than
+the live ones.
+
+**Replay harness.** Replay runs through a harness that loads recorded inputs and
+the pinned bundle and engine, re-evaluates, and compares the regenerated verdict
+to the recorded one. The harness has no binding to the execution surface; it is
+structurally incapable of dispatching effects (`EFFECT_DISPATCHED` cannot be
+produced on the replay path). A mismatch between regenerated and recorded verdict
+is a conformance failure surfaced for investigation.
+
+**Replay status field.** Each record carries the replay-status field
+(`replayable` / `degraded-by-attested-deletion` / `failed`). When Memoria or a
+data-erasure process deletes a replay-load-bearing input, it emits an attested
+deletion event under ZTG-0a and transitions the affected records to
+`degraded-by-attested-deletion`, linked to that event. Records that fail to
+replay without an accounting deletion are marked `failed` and raised as
+violations.
+
+**Conformance tests.** Constable's internal testing for ZTG-0b includes:
+verdict-reproduction tests over a corpus of recorded decisions; engine-drift
+tests confirming that an upgraded engine does not silently alter replayed
+verdicts; effect-isolation tests confirming the replay harness cannot dispatch
+effects; determinism tests confirming evaluation contains no
+implementation-dependent continuous computation in governance paths;
+replay-status tests confirming degraded records bind to attested deletions and
+failed records surface as violations. The protocol is documented in the
+conformance verification specification referenced in §22.

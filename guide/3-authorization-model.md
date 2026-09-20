@@ -60,3 +60,40 @@ wishes to reserve for human judgment into either a mechanical grant or a refusal
 reads as inadmissibility. The third verdict is what lets the architecture route a
 decision to human authority as a positive act — the human engaging the decision the
 policy chose to reserve for them — rather than as a failure of the machine to decide.
+
+## How We Do It (Constable reference implementation — non-normative)
+
+Constable implements the authorization model as the decision function of its execution
+gate: a reference monitor between the agent runtime and the effect surface that every
+proposed action must traverse and that emits exactly one verdict per request.
+
+**The request and the gate.** Constable assembles each authorization request from the
+agent's proposed action and validated parameters (post-Airlock), the asserted
+authorizing identity, the candidate surface route, and the pinned decision-time
+snapshot. The gate evaluates the request as a whole with OPA/Rego and returns one of
+`authorize`, `refuse`, or `escalate`, bound to the action, policy version, identity,
+and decision-time, and recorded under ZTG-0a (`AUTHORIZATION_REQUESTED`,
+`BOUNDARY_EVALUATED`, and the matching verdict event).
+
+**Admissibility as policy.** The seven admissibility conditions are evaluated against
+the pinned governance bundle: identity validity (ZTG-0d), temporal coherence (ZTG-0c),
+bundle consistency (ZTG-0e), policy permission, surface routing (ZTG-3), ceiling and
+gate (ZTG-5), and recordability. A request that fails any condition refuses; a request
+whose determination is indeterminate, or which policy reserves, escalates through
+HumanSeal.
+
+**Provenance retention.** Each grant records the authority it was made under — the
+attesting principal, or the ratified policy and the principal who ratified it — so the
+authority of any authorized effect traces to a human author. Constable holds no path by
+which a grant can be issued under authority that does not resolve to attested human
+responsibility.
+
+**Escalation through HumanSeal.** Escalated requests are surfaced to the authority
+policy designates, with the consequence context (harm class, ceiling, composite
+assessment) presented, and the human's engagement recorded as the act that resolves the
+escalation.
+
+**Convergence and conformance.** Constable's replay harness (ZTG-0b) regenerates a
+recorded determination from its substrate; the convergence test builds on this to check
+that independent assessment converges. The full conformance protocol is documented in
+the conformance verification specification referenced in §22.

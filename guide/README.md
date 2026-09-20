@@ -1,8 +1,9 @@
 # ZTG Deployment Guide
 
 This directory contains the non-normative explanatory material separated from the ZTG
-source chapters: introductory essays, operational questions, scope explanations, and
-further considerations.
+source chapters: introductory essays, operational questions, scope explanations,
+further considerations, and the Constable reference implementation's account of how each
+invariant is maintained in operation (`How We Do It`, non-normative).
 
 The Deployment Guide may explain or motivate a requirement, but it cannot amend,
 override, or replace the normative text in [`../spec/`](../spec/). It is licensed under
@@ -33,3 +34,23 @@ the ZTG Documentation License 1.0 as identified in [`../LICENSES.md`](../LICENSE
 - [§18 Input Sanitization Boundary](18-input-sanitization-boundary.md)
 - [§22 Conformance Verification](22-conformance-verification.md)
 - [§23 Graded Conformance](23-graded-conformance.md)
+
+## Companion material
+
+This repository holds the normative text (`spec/`) and the Deployment Guide
+(`guide/`). Each guide chapter carries the section's operational questions, its
+design rationale, and a non-normative account of how the Constable reference
+implementation maintains the invariant in operation (`How We Do It`). Material
+published outside the repository:
+
+- **[zerotrustgovernance.io](https://zerotrustgovernance.io)** — public home of
+  the specification: reading order, current draft status, and the essays the
+  normative chapters cite (§1.0 Preserving Human Agency, continuous
+  ratification, the Invariant/Envelope separation).
+- **[shadowdynamicsystems.com](https://shadowdynamicsystems.com)** — the
+  anti-pattern guide and the diagnosis (DX) and prescription (RX) series: the
+  failure modes each invariant is written to exclude, and the design
+  requirements that exclude them.
+- **[constable.id](https://constable.id)** — the reference implementation.
+  Nothing on that site is normative; conformance language is governed by
+  the *Conformance claims* section below.

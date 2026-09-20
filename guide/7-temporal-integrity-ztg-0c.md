@@ -75,3 +75,44 @@ response is to refuse rather than to proceed against uncertain time, and sustain
 loss of temporal integrity is a candidate Stasis (ZTG-2) trigger. The precise
 trigger semantics belong to the ZTG-2 chapter; ZTG-0c establishes that degraded
 temporal integrity is a refuse-not-proceed condition.
+
+## How We Do It (Constable reference implementation — non-normative)
+
+Constable establishes decision-time and a coherent snapshot from infrastructure
+the agent runtime cannot reach, and reconciles recorded time against the monotonic
+log.
+
+**Trusted time service.** Constable draws decision-time from a time service
+outside the agent runtime, attested and monotonic, with a configured skew bound.
+The agent runtime has no path to set, advance, or roll back this clock. Each
+decision records its decision-time, the time-source attestation, and the skew
+bound in effect, emitting a `TIME_SOURCE_CHECKED` event under ZTG-0a.
+
+**Snapshot pinning.** At decision-time the gate pins a coherent snapshot of policy
+bundle version, identity state, surface registry, and prior governance state, and
+evaluates against that snapshot rather than against live values that may move
+during evaluation. The pinned snapshot is the same object the ZTG-0b replay
+harness reloads, which is what lets a replay correspond to the world as of
+decision-time rather than to a later state.
+
+**Order reconciliation with the Monotonic Logger.** The append-only Monotonic
+Logger provides causal/append order; recorded wall-clock timestamps provide time.
+Constable reconciles the two and treats a timestamp that contradicts append order
+as a temporal-integrity fault — recorded, surfaced, and, where unresolved, routed
+to refusal. Causal order is authoritative for sequencing governance events;
+wall-clock time locates them.
+
+**Time-bounded checks.** Credential expiry, policy effective and expiry dates, and
+windowed authorizations are evaluated against trusted decision-time only. No
+time-bounded check consults a clock value supplied through the agent runtime or
+derived from model output.
+
+**Conformance tests.** Constable's internal testing for ZTG-0c includes:
+non-model-time tests confirming the agent runtime cannot influence decision-time;
+monotonicity and rollback tests confirming the clock cannot be moved backward
+silently; skew-bound tests confirming skew is bounded and recorded;
+snapshot-coherence tests confirming a decision's inputs derive from one cut and
+replay against it; staleness and future-state tests confirming such inputs are
+refused; and time/order reconciliation tests confirming timestamp-versus-append
+conflicts are detected and surfaced. The protocol is documented in the conformance
+verification specification referenced in §22.

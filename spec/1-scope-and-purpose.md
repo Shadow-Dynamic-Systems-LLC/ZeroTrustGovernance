@@ -27,6 +27,44 @@ stated as a requirement on the architecture, not as an aspiration about its use:
 architecture in which the machine could be the terminus of authority is not a ZTG
 architecture, whatever else it enforces.
 
+### Foundational Commitments
+
+Three commitments are stated here as requirements because the normative chapters
+rest on them. Each is also argued in the introduction; the argument is informative,
+the commitment is not.
+
+**Binding at the point of execution.** Governance under this specification is
+exercised in the execution path, not beside it. An authorization decision MUST be a
+precondition of the effect it authorizes: no path from proposal to effect MAY exist
+that does not pass through the decision. A control that evaluates an action and
+reports on it, but whose verdict is not a precondition of the action, is advisory
+and does not satisfy any requirement in this specification that calls for
+authorization, mediation, or refusal. Every authorization MUST trace to a
+principal's attested acceptance of responsibility for the effect authorized —
+directly, or through policy that principal ratified. The system MUST NOT be that
+principal.
+
+**Continuous ratification.** The authority of a ratifying principal is exercised at
+every authorization decision, not at intervals between which the system operates on
+its own. Each decision MUST be evaluated against the governance state in force at
+that decision's time (ZTG-0c, ZTG-0e), and that state MUST be attributable to the
+principal who ratified it (ZTG-0d). Ratification is therefore never in the past
+relative to a decision: a decision evaluated against governance state whose
+ratifying principal cannot be identified at decision-time, or whose ratification has
+been revoked, MUST refuse. Periodic human review of past decisions MAY exist; it does
+not substitute for this requirement and MUST NOT be represented as satisfying it.
+
+**Invariant independence from the Envelope.** The Invariant layer MUST NOT depend on
+any property of the Envelope (§2). *Depend* is defined operationally: an Invariant
+guarantee depends on the Envelope if there exists any Envelope behavior under which
+the guarantee fails to hold. Consequently every guarantee this specification assigns
+to the Invariant layer MUST hold under substitution of the Envelope by an arbitrary
+proposal source, including an adversarial one. Envelope output enters the Invariant
+layer only as a proposal subject to sanitization (§18) and authorization (§3); no
+Invariant-layer evaluation MAY read Envelope-internal state, confidence, alignment
+status, or provenance as an input to a verdict. Improving the Envelope MAY reduce how
+often the Invariant refuses; it MUST NOT be a condition of any Invariant guarantee.
+
 ### Applicability Preconditions
 
 Preconditions are **binary**. A deployment either satisfies them or this specification does
@@ -147,3 +185,19 @@ ratifying principal with no independent reviewer available, and the residual tha
 satisfies both parts. An honest declination conforms; an unresponsive affirmation does not.
 This asymmetry is intended: the instrument is built to reward disclosure of a residual over
 assertion of a control.
+
+**Foundational commitments.** For binding at the point of execution, the
+implementation exhibits, for every registered effect surface (ZTG-3), that the
+surface's effect path is unreachable without a prior authorization record for that
+specific effect (ZTG-4); a surface reachable by any path that lacks such a record
+fails. For continuous ratification, the implementation exhibits, for any sampled
+authorization, the governance-state version evaluated, the ratifying principal of
+that version, and that the principal's ratification was unrevoked at the recorded
+decision-time; an authorization for which any of the three cannot be produced fails.
+For Invariant independence, the implementation exhibits that its authorization
+verdict is reproducible by replay (ZTG-0b) from the sanitized proposal and the
+governance state alone, with no Envelope-side input, and that each Invariant-layer
+guarantee is asserted to hold under an arbitrary proposal source; a guarantee whose
+stated conditions include any Envelope property — model version, alignment method,
+evaluation score, or provider — fails as an Invariant guarantee and MAY be restated
+as an Envelope property.

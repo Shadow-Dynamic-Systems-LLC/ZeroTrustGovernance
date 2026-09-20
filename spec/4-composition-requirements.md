@@ -26,7 +26,7 @@ influence decision-time (ZTG-0c), or elevate its own memory contents into policy
 (ZTG-1). The reasoning system's outputs are untrusted input and are sanitized as such
 before they enter an authorization request (§18). Composing a more capable or
 better-aligned model does not move it inside the boundary; capability and alignment are
-Envelope properties, and the boundary's guarantees MUST NOT depend on them (§1.3).
+Envelope properties, and the boundary's guarantees MUST NOT depend on them (§1, Foundational Commitments).
 
 ### Memory Subsystems
 

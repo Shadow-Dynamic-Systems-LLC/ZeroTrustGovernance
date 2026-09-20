@@ -37,3 +37,12 @@ the floor.
 reproduction corpus, an injection result establish a property whether that property is scored
 pass/fail or placed on a frontier. §23 depends on §22 for *how* each survival claim is
 demonstrated; it adds only *how the demonstrated claims compose into a grade*.
+
+## How We Do It (Constable reference implementation — non-normative)
+
+Constable is the maximal instance — the ceiling reference implementation against which the delta
+is measured, not the definition of the floor. Its tainting property (no stochastic-derived value
+enters the authorization path unless adopted by a human) is the ceiling on the stochastic-containment
+axis; its full survival frontier across the threat model is the worked ceiling the design note
+develops (§6–§7). A Constable deployment's own conformance claim states its coverage against that
+ceiling per the scope discipline of §22.

@@ -89,3 +89,63 @@ An implementation should determine whether and how operations on the
 observability substrate are themselves observed, and document the determination
 as part of conformance. This chapter does not fully specify the recursion; it
 flags it.
+
+## How We Do It (Constable reference implementation — non-normative)
+
+Constable implements ZTG-0a as an append-only governance evidence substrate that
+every governance-relevant component writes to, structurally separated from the
+agent runtime so that the recorded subject cannot edit the record.
+
+**Authorization and Effect Record.** Constable records governance events into a
+monotonic evidence substrate. Each record carries event type, the invariant or
+prerequisite tag it bears on, policy version, identity, a ZTG-0c-consistent
+timestamp, an input digest, the output verdict, residual-harm and
+liability-ceiling fields where ZTG-5 applies, and correlation identifiers linking
+the records of a single authorization across components. The input digest, rather
+than raw input, is what binds into the chain by default; protected payloads are
+stored separately and referenced by digest, satisfying the protect-don't-omit
+discipline.
+
+**Event taxonomy.** Constable's governance event types include, at minimum:
+`AUTHORIZATION_REQUESTED`, `BOUNDARY_EVALUATED`, `AUTHORIZATION_GRANTED`,
+`AUTHORIZATION_REFUSED`, `AUTHORIZATION_ESCALATED`, `POLICY_VERSION_SELECTED`,
+`IDENTITY_VALIDATED`, `TIME_SOURCE_CHECKED`, `SURFACE_ROUTE_SELECTED`,
+`STASIS_ENTERED`, `STASIS_EXIT_REQUESTED`, `STASIS_EXIT_RATIFIED`,
+`EVIDENCE_APPENDED`, `EFFECT_DISPATCHED`, `HARM_CLASS_ASSIGNED`,
+`LIABILITY_CEILING_ASSIGNED`, `INPUT_NORMALIZED`, and
+`MEMORY_PROMOTION_REFERENCED`. The taxonomy is maintained so that every action
+path through the gate maps to a coverage expectation, making negative space
+testable.
+
+**Monotonic Logger integration.** The substrate is an append-only,
+tamper-evident record chain. Records are hash-linked so that alteration,
+deletion, or insertion is detectable, satisfying ZTG-0a's intrinsic integrity
+requirement independently of ZTG-4's effect-coupling. High-consequence events —
+Irreversible-class and over-threshold authorizations per ZTG-5 — are written as
+critical-class records. The Logger's integrity is a ZTG-0a property; its atomic
+coupling of an effect to its evidence, where an effect occurs, is the ZTG-4
+property. Constable satisfies both through the same substrate but does not
+conflate the requirements.
+
+**Airlock and Memoria signals.** Airlock emits input-normalization evidence
+(`INPUT_NORMALIZED`) so that the inputs a policy evaluated are reconstructable.
+Memoria emits promotion evidence (`MEMORY_PROMOTION_REFERENCED`) whenever memory
+content becomes policy-relevant input, preserving the ZTG-1 requirement that
+memory-to-policy elevation occur through explicit, attested promotion rather than
+implicit interpretation — and making that elevation observable.
+
+**Operator views.** HumanSeal surfaces observability to operators. The UI is
+constructed to avoid converting unresolved conditions into ambient calm:
+escalations and refusals under pressure are surfaced rather than aggregated away.
+Operator presentation is derived from the decision-level substrate; it is never
+the system of record.
+
+**Conformance tests.** Constable's internal testing for ZTG-0a includes:
+event-coverage tests asserting every action path produces its expected records;
+negative-path tests asserting refusals and escalations are recorded with
+reconstruction-sufficient fidelity; tamper tests asserting that altered, deleted,
+or inserted records are detected; gap tests asserting that a missing expected
+record triggers violation handling rather than passing silently; and
+metric-derivation tests asserting that operator metrics are computed from, and
+reconcile against, the decision-level records. The protocol is documented in the
+conformance verification specification referenced in §22.

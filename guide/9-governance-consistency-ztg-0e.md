@@ -73,3 +73,46 @@ condition, in the same family as persistent loss of temporal integrity (ZTG-0c).
 The boundary-level response is refusal; the system-level response to sustained
 inconsistency belongs to ZTG-2. ZTG-0e establishes the refuse-not-proceed
 condition; ZTG-2 owns escalation from repeated refusal to held state.
+
+## How We Do It (Constable reference implementation — non-normative)
+
+Constable treats governance state as a single versioned, consistently-distributed
+object, changes it only through authorized atomic transitions, and refuses when its
+enforcement points cannot agree on the version in effect.
+
+**Versioned governance bundles.** Policy, registries, harm-class and ceiling
+declarations, and substrate configuration are assembled into versioned governance
+bundles. The gate evaluates against a single bundle version, pinned at
+decision-time per ZTG-0c. A bundle is the unit of atomic transition: a change is a
+new bundle version that becomes effective as a whole, never field-by-field, so no
+decision sees a partially-applied change.
+
+**Authorized, recorded, ordered transitions.** A bundle transition is itself an
+authorized action: it is signed by a ratifying principal under ZTG-0d, emitted as a
+governance event under ZTG-0a, and ordered against the Monotonic Logger under
+ZTG-0c. A bundle that does not trace to a ratifying principal is not adopted. The
+record of which principal moved governance from version N to version N+1, and when,
+is part of the evidence substrate.
+
+**Consistent distribution across gates.** Where Constable runs more than one gate,
+all gates resolve the governance bundle version for a decision through a
+consistently-distributed mechanism, and a gate that cannot confirm it is operating
+the agreed version refuses rather than evaluating against a possibly-stale bundle.
+Constable chooses consistency under partition: a gate isolated from the governance
+plane fails closed.
+
+**Substrate configuration inside the perimeter.** Changes to Monotonic Logger
+retention, record schema, integrity mechanism, and access configuration are carried
+as part of the governance bundle, so reconfiguring the evidence substrate is an
+authorized, recorded, ordered, consistency-governed transition rather than an
+out-of-band infrastructure change. The mechanism for rooting the substrate's
+bootstrap authority is documented separately and flagged below as not fully settled.
+
+**Conformance tests.** Constable's internal testing for ZTG-0e includes:
+atomicity tests confirming no decision observes a partially-applied bundle
+transition; authorization tests confirming unsigned or unattributed transitions are
+not adopted; cross-gate consistency tests confirming divergent gates refuse rather
+than act; partition tests confirming an isolated gate fails closed; and
+substrate-governance tests confirming evidence-store reconfiguration is a governed
+transition. The protocol is documented in the conformance verification
+specification referenced in §22.

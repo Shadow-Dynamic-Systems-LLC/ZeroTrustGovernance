@@ -88,7 +88,7 @@ authority terminates at the system rather than at a human or institutional princ
 This is the property on which the framework's liability argument rests. Because every
 authorized effect traces to either a principal's direct attestation or a principal's
 ratified policy, every authorized effect has an accountable human author — the party
-whose attested acceptance of responsibility the authorization carries (§1.0). An
+whose attested acceptance of responsibility the authorization carries (§1, Foundational Commitments). An
 architecture in which some authorizations could not be traced to attested human
 authority would be one in which some consequential actions had no responsible author,
 which is the condition the model exists to make unrepresentable.
@@ -114,7 +114,7 @@ model and that no action becomes an effect except through its verdict; §3 speci
 what that verdict is and how it is reached. ZTG-3 guarantees the verdict has a closed
 set of channels to authorize into; ZTG-5 grades the verdict by consequence; the
 prerequisites guarantee the substrate the verdict is computed over and recorded into.
-The binding force §1.0 asks for — authority exercised at the point of execution rather
+The binding force §1, Foundational Commitments requires — authority exercised at the point of execution rather
 than advisorily — is realized here: the model is the point at which an accountable
 human's authority is exercised against a specific action, mediated by ZTG-1 and
 attributed by ZTG-0d.

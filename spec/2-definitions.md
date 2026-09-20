@@ -9,7 +9,7 @@ moderation, instruction-tuning). The Envelope produces *proposals*, never effect
 **Invariant** — the deterministic, structural layer that delivers hard guarantees:
 authorization gates, evidence chains, harm-class registration, ceiling enforcement,
 Stasis. **The Invariant layer MUST NOT depend on any property of the Envelope**
-(§1.3). An Invariant guarantee that reduces to a statistical property of the Envelope
+(§1, Foundational Commitments). An Invariant guarantee that reduces to a statistical property of the Envelope
 is not a guarantee.
 
 ## 2.2 The Execution Pipeline

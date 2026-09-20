@@ -78,3 +78,49 @@ hold should reflect this asymmetry, and an implementation that tunes its Stasis
 sensitivity uniformly across harm classes is leaving the asymmetry unused. The
 precise coupling between harm class and Stasis sensitivity is a composition concern
 between ZTG-2 and ZTG-5 rather than a property of either alone.
+
+## How We Do It (Constable reference implementation — non-normative)
+
+Constable implements Stasis as a held mode of the execution gate in which the gate
+returns no authorization for any action, entered on loss of guarantee and exited
+only on ratified authority.
+
+**Held gate.** In Stasis, Constable's execution gate grants no new authorization:
+every proposed action receives refusal, and there is no configuration or runtime
+signal that re-enables granting from within the held system. Because all governed
+effects route through the gate (ZTG-1), a held gate is sufficient to withhold all
+new governed effect without enumerating effects. The agent runtime continues to
+operate and the Monotonic Logger continues to record; neither is an authorization
+grant.
+
+**Trigger integration.** Constable enters Stasis on signals from the prerequisite
+layers: sustained failure of the trusted time service (ZTG-0c), inability to
+confirm the agreed governance bundle version across gates (ZTG-0e), Monotonic
+Logger integrity or availability failure (ZTG-0a), identity-validation failure
+(ZTG-0d), a reachable effect path without a registered surface (ZTG-3), an
+unreconciled indeterminate effect (ZTG-4), and detected tampering. Each entry emits
+`STASIS_ENTERED` with the triggering signal. Momentary conditions are handled as ordinary gate refusals;
+escalation to Stasis follows configured sustained-loss thresholds.
+
+**Ratified exit.** Exit runs through HumanSeal: the held state is surfaced to an
+authorized operator, who reviews the triggering condition and either resolves it or
+explicitly accepts it, and ratifies exit with credentials satisfying ZTG-0d.
+Constable records `STASIS_EXIT_REQUESTED` and `STASIS_EXIT_RATIFIED`. There is no
+auto-exit path; a time source that recovers, or gates that re-converge, do not
+release Stasis on their own.
+
+**Non-bypass.** The held mode is enforced in the gate, structurally separate from
+the agent runtime, with no agent-reachable path to clear it and no runtime override
+to fail it open. Operator authority can ratify exit; it cannot bypass the hold
+while the trigger stands without that ratification being a recorded, attributed
+act.
+
+**Conformance tests.** Constable's internal testing for ZTG-2 includes: trigger
+tests for each enumerated condition; escalation tests confirming momentary
+conditions refuse without entering Stasis while sustained conditions escalate;
+no-grant tests confirming no authorization is issued while held; observability-
+continuity tests confirming recording and state-surfacing continue in Stasis;
+exit tests confirming the system cannot self-exit or auto-exit and that exit
+requires ratified ZTG-0d authority; and bypass tests confirming no agent or runtime
+path clears the hold. The protocol is documented in the conformance verification
+specification referenced in §22.

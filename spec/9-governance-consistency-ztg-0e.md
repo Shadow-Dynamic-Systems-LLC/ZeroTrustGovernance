@@ -37,7 +37,7 @@ governance substrate traces to a ratifying principal exactly as the authority to
 take any other governed action does, and the change is attributable to that
 principal.
 
-This is where the introduction's claim of *continuous* ratifying authority (§1.2)
+This is where the introduction's claim of *continuous* ratifying authority (§1, Foundational Commitments)
 becomes checkable at the point of change rather than only at the point of action.
 A governance change made without attributable authority is not a legitimate change
 to the governing order; it is an unauthorized mutation of it, and ZTG-0e requires

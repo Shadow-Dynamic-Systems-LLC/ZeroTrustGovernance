@@ -77,3 +77,58 @@ granted, so the boundary grants nothing while held. The boundary refuses
 authorization when the system cannot guarantee invariants hold. Operational
 pressure to bypass during Stasis is expected; refusal is the architecture
 functioning as designed.
+
+## How We Do It (Constable reference implementation — non-normative)
+
+Constable implements the Mechanistic Boundary through architectural separation
+between the agent loop and the execution surface. The policy evaluation gate is
+structurally placed between these layers, with no path from agent to execution
+that does not traverse the gate.
+
+**The execution gate.** Constable's gate is separate from the agent runtime. It
+runs in its own process boundary, evaluates policies using OPA/Rego, and
+communicates decisions to the action surface through a channel the agent runtime
+cannot intercept. The gate's code is separately auditable, deployed, and
+versioned from the agent code.
+
+The gate evaluates one action at a time. Each evaluation is atomic with respect
+to policy state. The result is a verdict (`authorize`, `refuse`, `escalate`)
+bound to the specific action, policy version, and timestamp.
+
+**OPA/Rego as evaluation surface.** Constable uses OPA with Rego policies. OPA
+provides deterministic policy evaluation with policy code that is auditable,
+version-controlled, and replayable. Rego's evaluation model is decidable and
+side-effect-free. Other policy languages with equivalent properties can also be
+conforming implementation choices.
+
+**Integration with Airlock.** Constable composes with Airlock for input
+sanitization. All policy-evaluation inputs route through Airlock normalization
+before reaching the evaluator. The gate accepts only Airlock-processed inputs.
+
+**Memoria promotion gate.** Constable composes with Memoria through Memoria's
+promotion gate. Raw memory contents are not visible to policy evaluation.
+Memory contents consulted by policy must be promoted through explicit protocol
+requiring named human attestation.
+
+**Tool call routing.** Constable routes tool calls produced during inference
+through the execution gate before invocation. The model produces tool-call
+proposals; the gate evaluates them; only authorized proposals invoke tools.
+
+**Performance optimization within discipline.** Constable preserves boundary
+discipline while improving latency through policy pre-compilation, parallel
+evaluation of independent policies, input caching at the normalization boundary,
+and audit emission batching where durability is preserved. Authorization
+decisions are not cached across requests.
+
+**Conformance verification for ZTG-1.** Constable's internal testing includes:
+
+- Path analysis verifying no agent-to-execution bypass.
+- Replay testing for identical decisions from identical inputs.
+- Adversarial input testing under malformed and ambiguous inputs.
+- Tool-call interception testing.
+- Memory-bypass testing.
+- Stasis interaction testing.
+- Performance testing verifying discipline under load.
+
+The testing protocol is documented separately in the conformance verification
+specification referenced in §22.

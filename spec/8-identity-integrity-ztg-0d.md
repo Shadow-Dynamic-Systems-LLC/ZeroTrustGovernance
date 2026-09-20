@@ -29,7 +29,7 @@ terminates at an accountable party, never at the system.
 
 This is the identity-layer statement of a principle the framework asserts
 elsewhere: the system never originates authority (ZTG-5), and the ratifying
-officer's authority is exercised continuously through the architecture (§1.2).
+officer's authority is exercised continuously through the architecture (§1, Foundational Commitments).
 ZTG-0d makes that principle checkable by requiring the chain back to the ratifying
 principal to be present and attributable for any authorization, so that "the
 system did it on its own authority" is not a representable state. An action taken

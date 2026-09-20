@@ -58,3 +58,31 @@ accumulates across organizational boundaries, how Stasis in one system propagate
 those depending on it. §4 sets the principle (invariants hold end-to-end, attestations are
 verified not trusted, exposure composes) and is candid that the full treatment is future
 work.
+
+## How We Do It (Constable reference implementation — non-normative)
+
+Constable's perimeter is a small set of named composition surfaces, each explicitly placed
+inside or outside the trust boundary.
+
+**Inside the boundary.** The trusted time service (ZTG-0c), the identity and credential
+system (ZTG-0d), the Monotonic Logger (ZTG-0a), the surface registry and adaptors (ZTG-3),
+and HumanSeal (the human-authority path) are inside the boundary; each is held to the
+requirement its invariant states, and Constable's conformance regime (§22) verifies that
+it meets it rather than assuming it does.
+
+**Outside the boundary.** The agent runtime composes as proposer-only; Airlock sanitizes
+its output and every other input (§18) before the gate sees it; Memoria exposes the
+attested promotion gate through which memory content may become policy-relevant input. No
+governance input is taken from any of these on trust.
+
+**Effect targets and consumers.** External effect targets are reachable only through
+registered surface adaptors; Constable acquires a new effector only by registering a
+surface for it under governance (ZTG-0e). Evidence consumers — operator dashboards,
+exports — read derived views computed from the Logger and cannot write back into the
+decision path.
+
+**Composition checks.** Constable's conformance tests for §4 confirm that no governance
+input resolves to an outside system, that the agent holds no time/identity/promotion
+authority, that every input path traverses Airlock, and that effect targets are reachable
+only through registered surfaces. The protocol is documented in the conformance
+verification specification referenced in §22.

@@ -13,8 +13,8 @@ The established lineage is:
 - **v0.7:** published draft.
 - **v0.8:** conformance-complete adoption target; not yet adopted.
 
-This repository's 2026-09-09 publication has the working-draft identifier
-`0.8-draft-2026-09-09`. It must not be cited as the adopted v0.8 specification.
+This repository's 2026-09-19 publication has the working-draft identifier
+`0.8-draft-2026-09-19`. It must not be cited as the adopted v0.8 specification.
 
 Normative changes take effect only in the version named by an adopted amendment. Version
 history is append-only as governance history: an identifier may be retired or renumbered

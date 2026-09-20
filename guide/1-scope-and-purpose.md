@@ -155,3 +155,17 @@ under which their guarantees mean anything. An architecture that satisfied every
 this specification while terminating its own delegation chains would be a complete, coherent,
 and fully self-authorizing system — which is precisely the artifact this framework exists to
 make unbuildable.
+
+## How We Do It (Constable reference implementation — non-normative)
+
+Constable is deployed as a component of the deploying institution's Governed System. Its
+ratifying principals are that institution's officers, bound by ZTG-0d identity structure with
+key custody held outside the system. Policy adoption is an authorized action: a governance
+bundle is signed by a principal and emitted through the same gate as any other governed
+effect, so that the adoption of policy is itself a governed act with a record, not a
+configuration change.
+
+Constable refuses to operate on a bundle with no adoption lineage. This is the enforcement
+point for precondition 2: the failure is not detected at audit but at load, and the response
+is refusal rather than a warning. A deployment that cannot produce a signed adoption for its
+active policy does not run.

@@ -111,3 +111,49 @@ institution grows into, not a switch it flips. The framework does not soften the
 conformance requirement to fit institutions not yet ready to operate it; an
 institution early in adoption runs ZTG-5 with conservative defaults and matures its
 calibration, rather than running a relaxed ZTG-5.
+
+## How We Do It (Constable reference implementation — non-normative)
+
+Constable implements ZTG-5 as harm-class and ceiling declarations on its surface
+registry, a composite-analysis subsystem that bands assessment deterministically,
+and architecturally distinct gates for high-consequence actions.
+
+**Surface and sub-surface registration.** Constable registers harm-class defaults
+and compositional multipliers on surfaces and sub-surfaces in the same ZTG-3 surface
+registry, carried in the ZTG-0e governance bundle. Default classifications ship as
+*starting points*, not normative classifications: they are conservative defaults a
+deploying institution is expected to review and tighten for its context, not
+framework assertions about what a given surface's harm class is.
+
+**Liability ceiling computation.** Ceilings are computed from deployment-level
+policy and attached to each authorization request, then written into the ZTG-4
+evidence record. Constable originates no ceiling itself; the values come from the
+ratifying principal's policy. Harm-class assignment and ceiling assignment are
+recorded as `HARM_CLASS_ASSIGNED` and `LIABILITY_CEILING_ASSIGNED` events under
+ZTG-0a, so both are observable and replayable as of decision-time.
+
+**Composite-analysis subsystem.** A composite-analysis subsystem computes assessment
+as the recursive product of component assessments and surface multipliers, in
+discrete bands, so the result replays identically through the ZTG-0b harness. No
+continuous-valued computation enters the governance-determining path.
+
+**Irreversible-class gates.** Constable routes Irreversible-class and over-threshold
+actions to architecturally distinct high-end gates — separate gate structures, not
+the ordinary gate with extra checks. HumanSeal presents high-consequence
+authorizations to operators with the harm class, ceiling, and composite assessment
+surfaced, so a human engaging an Irreversible-class action sees its gravity rather
+than an undifferentiated approval prompt.
+
+**Critical-class evidence binding.** Irreversible-class and over-threshold actions
+are written as critical-class records on the Monotonic Logger, with the highest
+durability and integrity the substrate supports, bound write-ahead of the effect per
+ZTG-4. Mitigable-class actions record their residual harm.
+
+**Operator support and certification.** Constable provides operator support for
+calibrating multipliers and ceilings against experience, as a governed (ZTG-0e)
+activity, and forthcoming certification covers whether a deployment's ZTG-5
+configuration meets conformance. Conformance tests cover harm-class assignment,
+monotonic sub-surface tightening, banded deterministic assessment and its replay,
+distinct-gate promotion on either sufficient condition, ceiling presence in
+evidence, and reversal_strategy non-relaxation. The protocol is documented in the
+conformance verification specification referenced in §22.

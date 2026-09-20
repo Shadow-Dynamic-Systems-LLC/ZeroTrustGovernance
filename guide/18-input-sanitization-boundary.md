@@ -60,3 +60,34 @@ recording the post-normalization input (or pinning the normalizer), the architec
 the gate's input reconstructable, so a replayed decision evaluates the input the gate saw
 rather than a re-derivation of it. §18 and ZTG-0b meet exactly here, and the #8 reconciliation
 in §6 is the other half of this requirement.
+
+## How We Do It (Constable reference implementation — non-normative)
+
+Constable implements §18 as Airlock, the input-sanitization component every input traverses
+before the execution gate.
+
+**Canonicalization and validation.** Airlock normalizes inputs to a canonical form and
+validates them against the expected structure for their input class, rejecting malformed or
+un-normalizable input fail-closed. The gate accepts only Airlock-processed inputs; there is
+no path by which raw input reaches policy evaluation.
+
+**Model-output sanitization.** Tool-call proposals and action parameters produced by the
+agent runtime pass through Airlock as untrusted input before the gate evaluates them.
+Constable derives the harm-determining features used for routing and classification (§14,
+§12) from the Airlock-validated parameters, never from a model-asserted tag — the validated
+form is what the gate and the ZTG-5 routing function read.
+
+**Determinism, provenance, and replay.** Airlock's normalization is deterministic; Constable
+records the post-normalization input as the replay input and emits `INPUT_NORMALIZED`
+(ZTG-0a) with the provenance of each sanitized input, so a ZTG-0b replay reconstructs the
+gate's input exactly. Normalization that is version-relevant is pinned with the governance
+bundle.
+
+**Conformance tests.** Constable's testing for §18 includes: bypass tests confirming no input
+reaches the gate without Airlock; canonicalization tests confirming equivalent inputs
+normalize identically and encoding/ambiguity tricks collapse to one form; rejection tests
+confirming malformed input is refused fail-closed and recorded; model-output tests confirming
+agent output is sanitized as untrusted input and that routing features derive from validated
+parameters; and replay tests confirming the recorded canonical input reconstructs the gate's
+input. The protocol is documented in the conformance verification specification referenced in
+§22.

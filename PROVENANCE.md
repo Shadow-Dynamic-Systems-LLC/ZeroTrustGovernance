@@ -1,7 +1,7 @@
 # Publication provenance
 
-The `0.8-draft-2026-09-09` snapshot was produced on 2026-09-09 from the ZTG
-drafting workspace at source commit `19f242e`.
+The `0.8-draft-2026-09-19` snapshot was produced on 2026-09-19 from the ZTG
+drafting workspace at source commit `5fea9df`.
 
 The transformation is mechanical and reproducible with
 [`tools/split-drafting-source.py`](tools/split-drafting-source.py):
@@ -10,8 +10,10 @@ The transformation is mechanical and reproducible with
 - §2 definitions are copied verbatim into `spec/`;
 - introductions, operational framing, scope discussion, and further considerations are
   copied verbatim into `guide/`;
-- `How We Do It` sections, draft flags, working-draft notes, planning documents, and
-  calibration files are excluded.
+- `How We Do It` sections are copied verbatim into `guide/` under a heading marking
+  them as the Constable reference implementation's account, non-normative;
+- draft flags, working-draft notes, planning documents, and calibration files are
+  excluded.
 
 The split changes publication boundaries, not the source wording. Subsequent changes to
 normative files are governed by [`GOVERNANCE.md`](GOVERNANCE.md).

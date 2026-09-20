@@ -83,3 +83,50 @@ reproducible, and the effect is coupled to the reproduced decision, so the entir
 arc — what was decided, and what was done about it — is both reconstructable and
 non-severable. Replay never re-emits effects (ZTG-0b), so the coupled effect record
 is examined, never re-performed.
+
+## How We Do It (Constable reference implementation — non-normative)
+
+Constable implements ZTG-4 by committing effect evidence to the Monotonic Logger
+before dispatching the effect through the ZTG-3 surface, and by holding on any
+effect whose coupling it cannot confirm.
+
+**Write-ahead to the Monotonic Logger.** For every authorized effect, Constable
+commits the ZTG-4 evidence record durably to the Monotonic Logger before the effect is
+dispatched. The record carries the decision provenance, the ZTG-5 harm class and
+liability ceiling, and the ZTG-3 surface routing and reversal strategy. Only after
+the evidence is durably committed is the effect dispatched through the registered
+surface; the dispatch and its result are then recorded (`EVIDENCE_APPENDED`,
+`EFFECT_DISPATCHED`). The agent runtime has no path to dispatch an effect that
+bypasses this ordering.
+
+**Critical-class records for high harm class.** Irreversible-class and over-threshold
+effects (ZTG-5) are written as the highest-criticality records the Logger supports,
+with the durability and integrity guarantees those classes require, before dispatch.
+The narrowness of the write-ahead window is most rigorously enforced where harm class
+is highest.
+
+**Indeterminate-effect handling.** If Constable cannot confirm that an effect's
+evidence was committed and the effect dispatched as a coupled pair — a failure in the
+write-ahead window, or a detected effect without a committed record — it marks the
+effect indeterminate and enters Stasis (ZTG-2). Resolution runs as governed
+reconciliation: the disposition of the effect is established, often by querying the
+target surface, and recorded; or an authorized principal ratifies acceptance of the
+indeterminate state via HumanSeal. Normal operation resumes only after reconciliation
+or ratified acceptance.
+
+**Coupling path isolation.** The evidence-commit-then-dispatch sequence executes in
+the gate and surface mechanism, structurally separated from the agent runtime, so the
+agent can neither dispatch an effect while suppressing its evidence nor emit evidence
+for an effect it did not dispatch. The coupling is a property of the architecture, not
+of agent cooperation.
+
+**Conformance tests.** Constable's internal testing for ZTG-4 includes: ordering
+tests confirming no effect dispatches before durable evidence commit; orphan tests
+confirming no effect-evidence exists without a dispatch; crash-injection tests in the
+write-ahead window confirming the result is a recorded indeterminate effect and Stasis,
+never a silent gap; evidence-record tests confirming all prerequisite, ZTG-5, and
+ZTG-3 fields are present; reconciliation tests confirming indeterminate effects are
+resolved as governed, recorded activity; division tests confirming ZTG-4 coupling and
+ZTG-0a integrity are independently satisfied; and isolation tests confirming the agent
+cannot sever the coupling. The protocol is documented in the conformance verification
+specification referenced in §22.
