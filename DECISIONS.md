@@ -20,7 +20,9 @@ the boundary.
 
 The five-tier conformance model was ratified for the v0.8 release line on 2026-09-08:
 T1 Execution Governance, T2 Attested Execution, T3 Accountable Boundary, T4
-Environmental Containment, and T5 Full Constable Frontier. The companion
+Environmental Containment, and T5 Full Constable Frontier. On 2026-09-21 the founder fixed
+the endpoint names: T1 is the **Minimal Conformance Tier** and T5 the **Maximal Conformance
+Tier**; the descriptive labels above remain as descriptors of each tier's frontier. The companion
 minimum-conformance matrix was returned for revision and is not adopted. The dependency
 DAG was not included in that decision and remains undecided.
 
