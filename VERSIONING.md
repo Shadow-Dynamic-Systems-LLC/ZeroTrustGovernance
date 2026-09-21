@@ -10,7 +10,7 @@ The established lineage is:
 - **v0.5:** introduced the present ZTG-5, Irreversibility of Harm.
 - **v0.6:** unpublished internal draft; its durable result was the need for a lower
   conformance band.
-- **v0.7:** published draft.
+- **v0.7:** published.
 - **v0.8:** conformance-complete adoption target; not yet adopted.
 
 This repository's 2026-09-21 publication has the working-draft identifier
