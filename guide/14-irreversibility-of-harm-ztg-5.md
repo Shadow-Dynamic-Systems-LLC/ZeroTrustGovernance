@@ -149,10 +149,12 @@ are written as critical-class records on the Monotonic Logger, with the highest
 durability and integrity the substrate supports, bound write-ahead of the effect per
 ZTG-4. Mitigable-class actions record their residual harm.
 
-**Operator support and certification.** Constable provides operator support for
+**Operator support and conformance evidence.** Constable provides operator support for
 calibrating multipliers and ceilings against experience, as a governed (ZTG-0e)
-activity, and forthcoming certification covers whether a deployment's ZTG-5
-configuration meets conformance. Conformance tests cover harm-class assignment,
+activity, and produces the evidence from which an assessor can determine whether a
+deployment's ZTG-5 configuration meets conformance. No certification authority or
+conformance mark exists; the evidence supports an assessment, it does not confer a
+status. Conformance tests cover harm-class assignment,
 monotonic sub-surface tightening, banded deterministic assessment and its replay,
 distinct-gate promotion on either sufficient condition, ceiling presence in
 evidence, and reversal_strategy non-relaxation. The protocol is documented in the

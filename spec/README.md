@@ -5,7 +5,7 @@ OWFa 1.0 as identified in [`../LICENSES.md`](../LICENSES.md).
 
 They are published for implementation and review. They are not the adopted ZTG v0.8
 release, and publication does not create a certification or conformance-mark program.
-The OWFa version identifier for this snapshot is `0.8-draft-2026-09-19`.
+The OWFa version identifier for this snapshot is `0.8-draft-2026-09-21`.
 
 ## Contents
 

@@ -11,7 +11,7 @@ Shadow Dynamic Systems LLC applies the Open Web Foundation Final Specification
 Agreement 1.0 (OWFa 1.0) to every file under `spec/`.
 
 - **Specification:** Zero Trust Governance Working Draft
-- **Version identifier:** 0.8-draft-2026-09-19
+- **Version identifier:** 0.8-draft-2026-09-21
 - **Release line:** working draft toward ZTG v0.8; not the adopted v0.8 release
 - **Bound Entity:** Shadow Dynamic Systems LLC
 - **Official terms:** https://www.openwebfoundation.org/the-agreements/the-owf-1-0-agreements-granted-claims/owfa-1-0

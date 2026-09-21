@@ -103,7 +103,9 @@ tamper conditions — missing records, write-ahead crashes, altered log entries,
 between gates, suppressed evidence — and confirms the specified violation-handling and
 fail-closed responses.
 
-**Certification.** Forthcoming Constable certification packages this regime so that a
-deployment's conformance, and the scope over which it holds, can be presented as
-auditable evidence rather than asserted. The artifacts are constructed for
-re-examination by an outside party, consistent with the referee posture above.
+**Evidence packaging.** Constable packages this regime so that a deployment's
+conformance, and the scope over which it holds, can be presented as auditable evidence
+rather than asserted. The artifacts are constructed for re-examination by an outside
+party, consistent with the referee posture above. No certification authority or
+conformance mark exists; the package supports an assessment, it does not confer a
+status.

@@ -1,7 +1,7 @@
 # Publication provenance
 
-The `0.8-draft-2026-09-19` snapshot was produced on 2026-09-19 from the ZTG
-drafting workspace at source commit `5fea9df`.
+The `0.8-draft-2026-09-21` snapshot was produced on 2026-09-21 from the ZTG
+drafting workspace at source commit `18e9c31`.
 
 The transformation is mechanical and reproducible with
 [`tools/split-drafting-source.py`](tools/split-drafting-source.py):
