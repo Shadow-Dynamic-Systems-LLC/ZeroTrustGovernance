@@ -75,9 +75,10 @@ officially certified, endorsed, or “ZTG Conformant.” Descriptive statements 
 claims. Trademarks and names are not licensed, and no grant authorizes passing off a
 nonconforming or uncertified system as conforming or certified.
 
-## Copyright and licenses
-
-Copyright 2026 Shadow Dynamic Systems LLC.
-
-The normative specification, Deployment Guide, and software artifacts carry different
-licenses. See [`LICENSES.md`](LICENSES.md) for the controlling file-by-file boundary.
+## Licenses
+Normative specification: OWFa 1.0
+Deployment Guide and explanatory documentation: ZTG Documentation License 1.0
+Schemas and tooling: Apache License 2.0
+Constable: Copyright 2026 Shadow Dynamic Systems LLC.
+Zero Trust Governance: 
+See [`LICENSES.md`](LICENSES.md) for additional detail
