@@ -27,7 +27,8 @@ enumerate the governance-relevant event types its architecture can produce and
 demonstrate that each produces a record. At minimum the class includes:
 authorization requests; boundary evaluations and their verdicts; policy-version
 selection; identity validation; time-source checks; surface- and sub-surface
-routing decisions; Stasis entry, exit request, and exit ratification; harm-class
+routing decisions; Stasis entry, escalation, exit, exit request, and exit
+ratification, each with its scope; harm-class
 and liability-ceiling assignment; evidence-record emission; input normalization;
 and any promotion of memory content into policy-relevant input.
 

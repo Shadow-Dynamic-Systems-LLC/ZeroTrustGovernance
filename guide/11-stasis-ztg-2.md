@@ -75,15 +75,27 @@ asymmetric and tracks ZTG-5 harm class. Wrongly holding a Restorable-class
 capability is recoverable; wrongly proceeding on an Irreversible-class action under
 unestablished guarantees is not. The escalation threshold and the willingness to
 hold should reflect this asymmetry, and an implementation that tunes its Stasis
-sensitivity uniformly across harm classes is leaving the asymmetry unused. The
-precise coupling between harm class and Stasis sensitivity is a composition concern
-between ZTG-2 and ZTG-5 rather than a property of either alone.
+sensitivity uniformly across harm classes is leaving the asymmetry unused. §11 now
+states the coupling as a scope rule: an indeterminate effect is held at the permit for
+a Restorable-class surface with an enforced ceiling, at the surface for a Mitigable
+class or an unenforced ceiling, and at the control plane for an Irreversible class.
+
+**Scoped holds.** Stasis has at least four scopes: permit, component, surface, and
+control plane. Narrow scopes let the system keep granting where its guarantees still
+hold, which lowers the cost of holding and so lowers the pressure to bypass it. The
+discipline that keeps this safe is that a narrow hold lifts only on a legitimate
+resolution (an established disposition, a ratified acceptance, a verified restoration),
+never on apparent clearance, and that it widens as soon as the condition threatens the
+enclosing scope. An implementation that cannot yet hold narrowly may hold everything at
+the control plane; that is conforming, only more expensive.
 
 ## How We Do It (Constable reference implementation — non-normative)
 
 Constable implements Stasis as a held mode of the execution gate in which the gate
 returns no authorization for any action, entered on loss of guarantee and exited
-only on ratified authority.
+only on ratified authority. This is the control-plane scope. Narrower scopes (permit,
+component, surface) are specified for Constable's durable-queue recovery work and are
+not yet implemented.
 
 **Held gate.** In Stasis, Constable's execution gate grants no new authorization:
 every proposed action receives refusal, and there is no configuration or runtime

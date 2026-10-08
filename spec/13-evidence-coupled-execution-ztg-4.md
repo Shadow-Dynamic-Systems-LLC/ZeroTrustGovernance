@@ -52,8 +52,9 @@ An effect whose coupling cannot be confirmed — the write-ahead failure window 
 dispatch status is unknown, or any detected effect lacking committed evidence — is a
 loss of the ZTG-4 guarantee and MUST be treated as an integrity violation in the
 tamper family. Consistent with fail-closed semantics, an unreconciled indeterminate
-effect is a Stasis (ZTG-2) trigger: the system holds rather than continuing to act
-while the coupling between its effects and its evidence is in doubt. The
+effect is a Stasis (ZTG-2) trigger: the system holds, at the scope ZTG-2 requires for
+the effect's harm class, rather than continuing to act while the coupling between its
+effects and its evidence is in doubt. The
 indeterminate effect MUST be reconciled — its true disposition established and
 recorded — or its acceptance explicitly ratified by an authorized principal, before
 normal operation resumes. The system does not silently absorb a coupling gap, and it

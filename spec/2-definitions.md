@@ -109,9 +109,18 @@ relax the gate or the harm class.
 
 ## 2.6 States and Fault Families
 
-**Stasis** — the held state in which the system grants no new authority, entered on
-loss of a positive guarantee and exited only by ratified authority. Full treatment:
-§11 (ZTG-2).
+**Stasis** — the held state in which the system grants no new authority within a
+scope, entered on loss of a positive guarantee. Scopes include at least a permit, a
+component, a surface, and the control plane; control-plane Stasis, the severe form,
+holds authority at zero for the whole system and is exited only by ratified authority.
+A narrower scope is exited only on a legitimate resolution of its trigger. Full
+treatment: §11 (ZTG-2).
+
+**Legitimate resolution** — a resolution of a Stasis trigger that itself carries
+evidence and authority: an indeterminate effect's disposition established and recorded
+or its acceptance ratified, a lost guarantee verifiably restored, or a recorded act of
+an authorized principal. Apparent clearance is not a legitimate resolution. Full
+treatment: §11 (ZTG-2).
 
 **Indeterminate effect** — an effect whose evidence coupling cannot be confirmed (the
 write-ahead failure window, or a detected effect lacking committed evidence). A loss
