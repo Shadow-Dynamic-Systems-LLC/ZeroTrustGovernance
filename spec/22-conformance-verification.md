@@ -53,9 +53,9 @@ absence of a corresponding effect for a completion record cannot arise silently 
 guarantee*: Stasis fires on each trigger (ZTG-2); a partitioned gate fails closed
 (ZTG-0e); the write-ahead crash window yields a recorded indeterminate effect, never a
 silent gap (ZTG-4). These are verified by injecting the fault and confirming the
-fail-closed response — including that recovery from Stasis requires ratified authority
-and, for tamper-family triggers, independent re-verification (ZTG-2 Exit Path
-Integrity).
+fail-closed response — including that a held scope lifts only on a legitimate
+resolution, that recovery from control-plane Stasis requires ratified authority, and,
+for tamper-family triggers, independent re-verification (ZTG-2 Exit Path Integrity).
 
 **Integrity properties.** Some requirements assert *tamper-evidence*: governance records
 cannot be silently altered (ZTG-0a); the coupling path cannot be severed by the

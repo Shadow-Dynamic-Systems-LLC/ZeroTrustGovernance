@@ -1,3 +1,60 @@
+# ZTG-AMEND-NNN: Scoped Stasis (ZTG-2)
+
+| Field | Value |
+|---|---|
+| Identifier | `ZTG-AMEND-NNN` (number to be assigned by the steward; never reused) |
+| Title | Scoped Stasis, legitimate resolution, and escalation by threat to the enclosing scope |
+| Disposition | `proposed` |
+| Disposition history | 2026-10-08 `proposed` |
+| Adoption authority | Founder, as Managing Partner of Shadow Dynamic Systems LLC, under current stewardship (`GOVERNANCE.md`) |
+| Effective version | v0.8, if adopted before that release; otherwise the first version after adoption |
+| Affected provisions | §11 (ZTG-2) in full; §2.6 (Stasis; new term Legitimate resolution); §5 (ZTG-0a recorded events); §13 (ZTG-4, Indeterminate Effects); §22 (fault-injection properties) |
+| Non-normative companion | `guide/11-stasis-ztg-2.md` (Relationship to harm class; Scoped holds; Constable note) |
+
+## Rationale
+
+v0.4 retired the former ZTG-5, Graduated Freeze, and folded its semantics into ZTG-2
+(`VERSIONING.md`). The published §11 never absorbed that change. It describes only the
+severe form, with the whole authority-granting function held at zero, so a single
+indeterminate effect on a Restorable-class surface takes the entire system out of
+service. That cost creates pressure to bypass Stasis, which ZTG-2 itself identifies as
+the failure to resist.
+
+The amendment restores graduated Stasis without weakening the severe form:
+
+1. **Scopes.** Stasis is held over a scope: at least permit, component, surface, and
+   control plane, in an open set. Control-plane Stasis is unchanged and mandatory.
+   Narrower scopes are optional, because holding wider than required is always
+   permitted.
+2. **Scope selection.** The scope must be no narrower than the lost guarantee.
+   System-wide guarantee losses, detected tampering, and closure breaches hold the
+   control plane. An indeterminate effect's minimum scope follows its ZTG-5 harm class.
+   This states the "composition concern between ZTG-2 and ZTG-5" that the guide left
+   open.
+3. **Escalation.** A hold widens when its condition threatens an invariant of the
+   enclosing scope, or degrades it. Time alone neither escalates nor releases a hold.
+4. **Exit.** A narrower scope lifts only on a legitimate resolution, never on apparent
+   clearance. Control-plane exit stays ratified under ZTG-0d, with no auto-exit.
+5. **Exit Path Integrity.** §22 already cites this provision, but §11 did not contain
+   it. It is restored: tamper-family exits need independent re-verification, separate
+   from ratification.
+
+**Judgment for review.** §13 places every unreconciled indeterminate effect in the
+tamper family, and the tamper family otherwise holds the control plane. This amendment
+lets an indeterminate effect whose doubt is confined to one effect be held at the scope
+its harm class requires. Any sign that the doubt is not confined is detected tampering
+or a recording-integrity loss, and holds the control plane. If this exception is not
+accepted, scoped Stasis still applies to the other triggers, but every indeterminate
+effect holds the control plane.
+
+**Unchanged.** The handling of in-flight actions at entry remains flagged for
+refinement. The triggers are unchanged except that each records its scope. Momentary
+refusals versus sustained-loss escalation is unchanged.
+
+## Exact proposed normative text
+
+### §11 (replaces the section in full)
+
 # §11. Stasis (ZTG-2)
 
 ## Normative
@@ -204,3 +261,81 @@ system cannot self-exit or auto-exit on apparent clearance; require independent 
 verification before exit from tamper-family triggers; record entry, escalation, and
 exit as governance events; and demonstrate that Stasis, and the breadth of a held
 scope, cannot be bypassed or narrowed by the governed system or by runtime override.
+
+### Conforming changes to §2, §5, §13 and §22
+
+```diff
+diff --git a/spec/13-evidence-coupled-execution-ztg-4.md b/spec/13-evidence-coupled-execution-ztg-4.md
+index 3aa7dcc..3e62919 100644
+--- a/spec/13-evidence-coupled-execution-ztg-4.md
++++ b/spec/13-evidence-coupled-execution-ztg-4.md
+@@ -52,8 +52,9 @@ An effect whose coupling cannot be confirmed — the write-ahead failure window
+ dispatch status is unknown, or any detected effect lacking committed evidence — is a
+ loss of the ZTG-4 guarantee and MUST be treated as an integrity violation in the
+ tamper family. Consistent with fail-closed semantics, an unreconciled indeterminate
+-effect is a Stasis (ZTG-2) trigger: the system holds rather than continuing to act
+-while the coupling between its effects and its evidence is in doubt. The
++effect is a Stasis (ZTG-2) trigger: the system holds, at the scope ZTG-2 requires for
++the effect's harm class, rather than continuing to act while the coupling between its
++effects and its evidence is in doubt. The
+ indeterminate effect MUST be reconciled — its true disposition established and
+ recorded — or its acceptance explicitly ratified by an authorized principal, before
+ normal operation resumes. The system does not silently absorb a coupling gap, and it
+diff --git a/spec/2-definitions.md b/spec/2-definitions.md
+index 4b82d5c..0209207 100644
+--- a/spec/2-definitions.md
++++ b/spec/2-definitions.md
+@@ -109,9 +109,18 @@ relax the gate or the harm class.
+ 
+ ## 2.6 States and Fault Families
+ 
+-**Stasis** — the held state in which the system grants no new authority, entered on
+-loss of a positive guarantee and exited only by ratified authority. Full treatment:
+-§11 (ZTG-2).
++**Stasis** — the held state in which the system grants no new authority within a
++scope, entered on loss of a positive guarantee. Scopes include at least a permit, a
++component, a surface, and the control plane; control-plane Stasis, the severe form,
++holds authority at zero for the whole system and is exited only by ratified authority.
++A narrower scope is exited only on a legitimate resolution of its trigger. Full
++treatment: §11 (ZTG-2).
++
++**Legitimate resolution** — a resolution of a Stasis trigger that itself carries
++evidence and authority: an indeterminate effect's disposition established and recorded
++or its acceptance ratified, a lost guarantee verifiably restored, or a recorded act of
++an authorized principal. Apparent clearance is not a legitimate resolution. Full
++treatment: §11 (ZTG-2).
+ 
+ **Indeterminate effect** — an effect whose evidence coupling cannot be confirmed (the
+ write-ahead failure window, or a detected effect lacking committed evidence). A loss
+diff --git a/spec/22-conformance-verification.md b/spec/22-conformance-verification.md
+index ad3955f..10d4537 100644
+--- a/spec/22-conformance-verification.md
++++ b/spec/22-conformance-verification.md
+@@ -53,9 +53,9 @@ absence of a corresponding effect for a completion record cannot arise silently
+ guarantee*: Stasis fires on each trigger (ZTG-2); a partitioned gate fails closed
+ (ZTG-0e); the write-ahead crash window yields a recorded indeterminate effect, never a
+ silent gap (ZTG-4). These are verified by injecting the fault and confirming the
+-fail-closed response — including that recovery from Stasis requires ratified authority
+-and, for tamper-family triggers, independent re-verification (ZTG-2 Exit Path
+-Integrity).
++fail-closed response — including that a held scope lifts only on a legitimate
++resolution, that recovery from control-plane Stasis requires ratified authority, and,
++for tamper-family triggers, independent re-verification (ZTG-2 Exit Path Integrity).
+ 
+ **Integrity properties.** Some requirements assert *tamper-evidence*: governance records
+ cannot be silently altered (ZTG-0a); the coupling path cannot be severed by the
+diff --git a/spec/5-observability-ztg-0a.md b/spec/5-observability-ztg-0a.md
+index 7371e97..0d13a12 100644
+--- a/spec/5-observability-ztg-0a.md
++++ b/spec/5-observability-ztg-0a.md
+@@ -27,7 +27,8 @@ enumerate the governance-relevant event types its architecture can produce and
+ demonstrate that each produces a record. At minimum the class includes:
+ authorization requests; boundary evaluations and their verdicts; policy-version
+ selection; identity validation; time-source checks; surface- and sub-surface
+-routing decisions; Stasis entry, exit request, and exit ratification; harm-class
++routing decisions; Stasis entry, escalation, exit, exit request, and exit
++ratification, each with its scope; harm-class
+ and liability-ceiling assignment; evidence-record emission; input normalization;
+ and any promotion of memory content into policy-relevant input.
+ 
+```
